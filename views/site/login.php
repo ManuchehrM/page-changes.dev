@@ -21,7 +21,7 @@ $fieldOptions2 = [
 
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b>Admin</b>LTE</a>
+        <a href="#">Фиксация изменений страниц</a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
