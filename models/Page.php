@@ -118,4 +118,8 @@ class Page extends \yii\db\ActiveRecord
         }
     }
 
+    public static function getPages(){
+        return self::find()->asArray()->all();
+    }
+
 }

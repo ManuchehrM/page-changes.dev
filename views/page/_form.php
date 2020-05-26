@@ -24,7 +24,11 @@ use yii\widgets\ActiveForm;
     <div class="col-lg-12">
         <?= $form->field($model, 'content')->textarea(['rows' => 12]) ?>
     </div>
-
+    <?php if(Yii::$app->controller->action->id=='update'): ?>
+    <div class="col-lg-12">
+        <?= $form->field($updateDescription, 'update_description')->textarea(['rows' => 6])->label('Описание изменений') ?>
+    </div>
+    <?php endif; ?>
     <div class="form-group text-center">
         <?= Html::submitButton('Добавить', ['class' => 'btn btn-success']) ?>
     </div>

@@ -302,6 +302,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->auth_key === $authKey;
     }
 
+    public static function getUsers(){
+      return  self::find()->where(['is_block' => 0])->asArray()->all();
+    }
+
 
 
 

@@ -35,9 +35,9 @@ class Log extends \yii\db\ActiveRecord
     {
         return [
             [['updated_at'], 'safe'],
-            [['updated_by', 'page_id', 'status'], 'integer'],
             [['update_description'], 'string'],
             [['page_id'], 'exist', 'skipOnError' => true, 'targetClass' => Page::className(), 'targetAttribute' => ['page_id' => 'id']],
+            [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'user_id']],
         ];
     }
 
@@ -48,10 +48,10 @@ class Log extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'updated_at' => 'Updated At',
-            'updated_by' => 'Updated By',
-            'page_id' => 'Page ID',
-            'update_description' => 'Update Description',
+            'updated_at' => 'Время редактирования',
+            'updated_by' => 'Пользователь который их внес',
+            'page_id' => 'Страница в которой внесены изменения',
+            'update_description' => 'Описание изменений',
             'status' => 'Status',
         ];
     }
@@ -64,5 +64,9 @@ class Log extends \yii\db\ActiveRecord
     public function getPage()
     {
         return $this->hasOne(Page::className(), ['id' => 'page_id']);
+    }
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['user_id' => 'updated_by']);
     }
 }

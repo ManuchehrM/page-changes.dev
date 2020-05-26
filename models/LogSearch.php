@@ -56,16 +56,22 @@ class LogSearch extends Log
             return $dataProvider;
         }
 
+        $dates = explode(' - ', $_GET['date_range_1']);
+        $start_date = $dates[0];
+        $end_date = $dates[1];
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'updated_at' => $this->updated_at,
+            //'updated_at' => $this->updated_at,
             'updated_by' => $this->updated_by,
             'page_id' => $this->page_id,
             'status' => $this->status,
         ]);
 
         $query->andFilterWhere(['like', 'update_description', $this->update_description]);
+        $query->andFilterWhere(['>=', 'DATE(updated_at)', $start_date]);
+        $query->andFilterWhere(['<=', 'DATE(updated_at)', $end_date]);
 
         return $dataProvider;
     }

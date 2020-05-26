@@ -6,6 +6,7 @@ use app\models\Log;
 use Yii;
 use app\models\Page;
 use app\models\PageSearch;
+use yii\db\Expression;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -99,8 +100,9 @@ class PageController extends Controller
     {
         //TODO log description and create log filter
         $model = $this->findModel($id);
+        $updateDescription = new Log();
         $oldFile = $model->preview;
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $updateDescription->load(Yii::$app->request->post())) {
             $previewFile = UploadedFile::getInstance($model, 'preview');
             if(!empty($previewFile)){
                 $path = Yii::getAlias('@webroot');
@@ -110,7 +112,9 @@ class PageController extends Controller
             }else{
                 $model->preview = $oldFile;
             }
-            $model->updateTrigger($model);
+            $model->updateTrigger($model, $updateDescription->update_description);
+            $model->updated_at = new Expression('NOW()');
+            $model->updated_by = Yii::$app->user->id;
             if($model->save()){
                 \Yii::$app->session->setFlash('success', 'Страница успешно обновлено!');
             }
@@ -119,6 +123,7 @@ class PageController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'updateDescription' => $updateDescription
         ]);
     }
 

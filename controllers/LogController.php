@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Page;
+use app\models\User;
 use Yii;
 use app\models\Log;
 use app\models\LogSearch;
+use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -41,6 +44,8 @@ class LogController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'pages' => \yii\helpers\ArrayHelper::map(Page::getPages(), 'id', 'name'),
+            'users' => \yii\helpers\ArrayHelper::map(User::getUsers(), 'user_id', 'username'),
         ]);
     }
 
@@ -107,6 +112,16 @@ class LogController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionDetails($page_id){
+        $page_id = Html::encode($page_id);
+        $details = Log::find()
+            ->select('log.*, p.*, log.updated_at as sss')
+            ->leftJoin('page p', 'log.page_id=p.id')
+            ->where(['page_id' => $page_id])->asArray()->all();
+
+        return $this->render('details', ['details' => $details]);
     }
 
     /**
